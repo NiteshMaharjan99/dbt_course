@@ -1,5 +1,10 @@
 models:
   - name: dim_listings_cleansed
+    data_tests:
+      - minimum_row_count:
+          arguments:
+            min_row_count: 1000
+          severity: error
     columns:
       - name: listing_id
         data_tests:
@@ -20,22 +25,27 @@ models:
               arguments:
                 values: ['Entire home/apt', 'Private room', 'Shared room', 'Hotel room']
 
-  - name: dim_hosts_cleansed
-    columns:
-      - name: host_id
-        data_tests:
-          - unique
-          - not_null
+      - name: minimum_nights
+        data_test:
+          - positive_values
+
+  ### data_tests without contracts ###
+  # - name: dim_hosts_cleansed
+  #   columns:
+  #     - name: host_id
+  #       data_tests:
+  #         - unique
+  #         - not_null
       
-      - name: host_name
-        data_tests:
-          - not_null
+  #     - name: host_name
+  #       data_tests:
+  #         - not_null
       
-      - name: is_superhost
-        data_tests:
-          - accepted_values:
-              arguments:
-                values: ['t', 'f']
+  #     - name: is_superhost
+  #       data_tests:
+  #         - accepted_values:
+  #             arguments:
+  #               values: ['t', 'f']
 
   - name: fct_reviews
     columns:
@@ -55,3 +65,33 @@ models:
           - accepted_values:
               arguments:
                 values: ['positive', 'neutral', 'negative']
+
+  ### data test and added contracts
+  - name: dim_hosts_cleansed
+    config:
+      contract:
+        enforced: true
+    columns:
+      - name: host_id
+        data_type: integer
+        data_tests:
+          - unique
+          - not_null
+      
+      - name: host_name
+        data_type: string
+        data_tests:
+          - not_null
+      
+      - name: is_superhost
+        data_type: string
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['t', 'f']
+
+      - name: created_at
+        data_type: timestamp
+
+      - name: updated_at
+        data_type: timestamp
