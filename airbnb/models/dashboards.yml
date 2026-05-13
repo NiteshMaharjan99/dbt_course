@@ -1,0 +1,18 @@
+version: 2
+
+exposures:
+  - name: execute_dashboard
+    label: Executive Dashboard
+    type: dashboard
+    maturity: low
+    url: https://2b08df85.us1a.app.preset.io/superset/dashboard/10/?edit=true&native_filters_key=NG5CBuDP19g
+    description: Executive Dashboard about Airbnb listings and hosts
+    
+
+    depends_on:
+      - ref('dim_listings_w_hosts')
+      - ref('mart_fullmoon_reviews')
+
+    owner:
+      name: Nitesh Maharjan
+      email: nitesh_test@gmail.com
